@@ -18,16 +18,16 @@ var menu = {
 		menu: [{
 			title: '各车型冷热程度',
 			icon: 'img/img4.png',
-			href: 'project/userinfo.html',
+			href: 'ClientServlet?methods=showFashionPage',
 			isCurrent: true
 		},{
 			title: '价格分析',
 			icon: 'img/img4.png',
-			href: 'project/plan.html'
+			href: 'ClientServlet?methods=showPricePage'
 		},{
 			title: '客户信息来源',
 			icon: 'img/img4.png',
-			href: 'project/work_record.html'
+			href: ''
 		}]
 	},
 
@@ -37,11 +37,11 @@ var menu = {
 			title: '4s点情况',
 			icon: 'img/img4.png',
 			isCurrent: true,
-			href: 'query/work_situation_query.html'
+			href: ''
 		},{
 			title: '店员情况',
 			icon: 'img/img4.png',
-			href: 'query/work_summary.html'
+			href: ''
 		}]
 	}
 };
