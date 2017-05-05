@@ -3,8 +3,9 @@ package entity;
 /*
  * 订单查找条件实体
  * */
-public class OrderFindCondition {
+public class FindCondition {
 	private String s_name;
+	private String e_name;
 	private String car_type;
 	private String car_class;
 	private String car_model;
@@ -59,6 +60,12 @@ public class OrderFindCondition {
 	}
 	public void setPeriod(String period) {
 		this.period = period;
+	}
+	public String getE_name() {
+		return e_name;
+	}
+	public void setE_name(String e_name) {
+		this.e_name = e_name;
 	}
 
 }

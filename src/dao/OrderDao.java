@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Order;
-import entity.OrderFindCondition;
+import entity.FindCondition;
 import entity.StatisticsOrder;
 import util.JDBCUtil;
 import util.TimeUtil;
@@ -68,7 +68,7 @@ public class OrderDao{
 	/*
 	 * 按条件检索订单信息
 	 * */
-	public List<Order> findOrderByCondition(OrderFindCondition condition){
+	public List<Order> findOrderByCondition(FindCondition condition){
 		List<Order> result = new ArrayList<>();
 		Order order = null;
 		String sql = this.getSqlStringByCondition(condition);
@@ -112,7 +112,7 @@ public class OrderDao{
 	/*
 	 * 根据条件返回sql语句
 	 * */
-	private String getSqlStringByCondition(OrderFindCondition condition){
+	private String getSqlStringByCondition(FindCondition condition){
 		String sql = "select * from orderview where s_name like 1 and car_type like 2 and car_class like 3 and car_model like 4 and o_date between 5 and 6";
 		if (condition.getS_name().equals("不限") && condition.getCar_type().equals("不限") 
 				&& condition.getCar_class().equals("不限") && condition.getCar_model().equals("不限")
@@ -156,7 +156,7 @@ public class OrderDao{
 	/*
 	 * 根据不同的周期查询销售统计结果
 	 * */
-	public List<StatisticsOrder> showOrderByPeriod(OrderFindCondition orderFindCondition) {
+	public List<StatisticsOrder> showOrderByPeriod(FindCondition orderFindCondition) {
 		List<StatisticsOrder> result = new ArrayList<>();
 		StatisticsOrder order = null;
 		conn = JDBCUtil.getConnection();

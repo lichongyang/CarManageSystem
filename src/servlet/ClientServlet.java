@@ -16,7 +16,7 @@ import dao.OrderDao;
 import entity.CarFashionAnalyze;
 import entity.CarFashionAnalyzeCondition;
 import entity.Order;
-import entity.OrderFindCondition;
+import entity.FindCondition;
 import entity.StatisticsClientSource;
 import entity.StatisticsOrder;
 
@@ -81,7 +81,7 @@ public class ClientServlet extends HttpServlet {
 		}else if (methods != null && methods.equals("ClientSourceAnalyze")){
 			String findConditionString = request.getParameter("info");
 			ObjectMapper mapper = new ObjectMapper();
-			OrderFindCondition orderFindCondition = mapper.readValue(findConditionString, OrderFindCondition.class);
+			FindCondition orderFindCondition = mapper.readValue(findConditionString, FindCondition.class);
 			ClientDao dao = new ClientDao();
 			List<StatisticsClientSource> result = dao.findClientSource(orderFindCondition);
 			String jsonlist = mapper.writeValueAsString(result);

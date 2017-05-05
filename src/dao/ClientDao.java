@@ -1,7 +1,7 @@
 package dao;
 
 import entity.CarFashionAnalyzeCondition;
-import entity.OrderFindCondition;
+import entity.FindCondition;
 import entity.StatisticsClientSource;
 import entity.StatisticsOrder;
 import util.JDBCUtil;
@@ -292,7 +292,7 @@ public class ClientDao {
 		return result;
 	}
 
-	public List<StatisticsClientSource> findClientSource(OrderFindCondition condition){
+	public List<StatisticsClientSource> findClientSource(FindCondition condition){
 		List<StatisticsClientSource> result = new ArrayList<>();
 		StatisticsClientSource statisticsClientSource = null;
 		conn = JDBCUtil.getConnection();

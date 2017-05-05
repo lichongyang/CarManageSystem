@@ -1,9 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,27 +9,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dao.ClientDao;
+import dao.EmployeeDao;
 import dao.OrderDao;
-import entity.Order;
+import entity.EmployeePerformance;
 import entity.FindCondition;
+import entity.ShopPerformance;
+import entity.StatisticsClientSource;
 import entity.StatisticsOrder;
 
-
 /**
- * Servlet implementation class OrderServlet
+ * Servlet implementation class EmployeeServlet
  */
-@WebServlet("/OrderServlet")
-public class OrderServlet extends HttpServlet {
+@WebServlet("/EmployeeServlet")
+public class EmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+       
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public OrderServlet() {
+    public EmployeeServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -51,34 +51,31 @@ public class OrderServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		String methods = request.getParameter("methods");
-		if (methods != null && methods.equals("showAllOrder")){
-			//显示所有订单
-			OrderDao dao = new OrderDao();
-			List<Order> result = dao.showAllOrder();
-			request.setAttribute("order", result);
-			request.getRequestDispatcher("car/order_find.jsp").forward(request, response);
-		}else if (methods != null && methods.equals("findOrder")){
-			//根据条件检索订单信息
+		if (methods != null && methods.equals("showEmployeePerformancePage")){
+			//点击店员分析后渲染页面
+			request.getRequestDispatcher("employee/employee_performance.jsp").forward(request, response);
+		}else if (methods != null && methods.equals("EmployeePerformanceAnalyze")){
 			String findConditionString = request.getParameter("info");
 			ObjectMapper mapper = new ObjectMapper();
-			FindCondition orderFindCondition = mapper.readValue(findConditionString, FindCondition.class);
-			OrderDao dao = new OrderDao();
-			List<Order> result = dao.findOrderByCondition(orderFindCondition);
+			FindCondition findCondition = mapper.readValue(findConditionString, FindCondition.class);
+			EmployeeDao dao = new EmployeeDao();
+			List<EmployeePerformance> result = dao.showEmployeePerformance(findCondition);
 			String jsonlist = mapper.writeValueAsString(result);
 			System.out.print(jsonlist);
 			response.getWriter().println(jsonlist);
-		}else if (methods != null && methods.equals("showShopOrder")){
-			//点击后渲染4s店销售情况页面
-			request.getRequestDispatcher("car/order_shop.jsp").forward(request, response);
-		}else if (methods != null && methods.equals("showOrderByPeriod")){
+		}else if(methods != null && methods.equals("showShopPerformancePage")){
+			//点击绩效分析4s店后渲染页面
+			request.getRequestDispatcher("employee/shop_performance.jsp").forward(request, response);
+		}else if(methods != null && methods.equals("ShopPerformanceAnalyze")){
 			String findConditionString = request.getParameter("info");
 			ObjectMapper mapper = new ObjectMapper();
-			FindCondition orderFindCondition = mapper.readValue(findConditionString, FindCondition.class);
-			OrderDao dao = new OrderDao();
-			List<StatisticsOrder> result = dao.showOrderByPeriod(orderFindCondition);
+			FindCondition findCondition = mapper.readValue(findConditionString, FindCondition.class);
+			EmployeeDao dao = new EmployeeDao();
+			ShopPerformance result = dao.findShopPerformance(findCondition);
 			String jsonlist = mapper.writeValueAsString(result);
 			System.out.print(jsonlist);
 			response.getWriter().println(jsonlist);
 		}
 	}
+
 }

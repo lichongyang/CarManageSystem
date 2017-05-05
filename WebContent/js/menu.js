@@ -34,14 +34,14 @@ var menu = {
 	'employee': {
 		title: '绩效管理',
 		menu: [{
-			title: '4s点情况',
+			title: '4s店情况',
 			icon: 'img/img4.png',
 			isCurrent: true,
-			href: ''
+			href: 'EmployeeServlet?methods=showShopPerformancePage'
 		},{
 			title: '店员情况',
 			icon: 'img/img4.png',
-			href: ''
+			href: 'EmployeeServlet?methods=showEmployeePerformancePage'
 		}]
 	}
 };
