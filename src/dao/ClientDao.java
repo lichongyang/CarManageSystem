@@ -1,7 +1,11 @@
 package dao;
 
 import entity.CarFashionAnalyzeCondition;
+import entity.OrderFindCondition;
+import entity.StatisticsClientSource;
+import entity.StatisticsOrder;
 import util.JDBCUtil;
+import util.TimeUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -288,4 +292,102 @@ public class ClientDao {
 		return result;
 	}
 
+	public List<StatisticsClientSource> findClientSource(OrderFindCondition condition){
+		List<StatisticsClientSource> result = new ArrayList<>();
+		StatisticsClientSource statisticsClientSource = null;
+		conn = JDBCUtil.getConnection();
+		String s_name = "";
+		String year = "";
+		if (condition.getS_name().equals("不限")){
+			s_name = "s_name";
+		}else{
+			s_name = "'" + condition.getS_name() + "'";
+		}
+		//如果输入的年份为空，则自动获取当前系统年份
+		if (condition.getYear() == ""){
+			year = TimeUtil.getYear();
+		}else{
+			year = condition.getYear();
+		}
+		if (condition.getPeriod().equals("month")){
+			String sql = " select month,num,source from "
+					+ "(select date_format(r_date,'%m') as month, count(r_id) as num, where_from as source "
+					+ "from receptionview where s_name=1001 and date_format(r_date,'%Y')='1002' "
+					+ "group by month,source order by month) as a";
+			sql = sql.replaceAll("1001", s_name);
+			sql = sql.replace("1002", year);
+			System.out.print(sql);
+			try{
+				psmt = conn.prepareStatement(sql);
+				rs = psmt.executeQuery();
+				while(rs.next()){
+					String month = rs.getString("month");
+					String source = rs.getString("source");
+					int num = rs.getInt("num");
+					statisticsClientSource = new StatisticsClientSource();
+					statisticsClientSource.setMonth(month);
+					statisticsClientSource.setClient_source(source);
+					statisticsClientSource.setStatistics_num(num);
+					result.add(statisticsClientSource);
+				}
+			}catch(SQLException e){
+					e.printStackTrace();
+			}finally{
+				JDBCUtil.closeConnection(conn, stmt, psmt, rs);
+			}
+		}else if (condition.getPeriod().equals("season")){
+			String sql = "select season,num,source from "
+					+ "(select quarter(r_date) as season, count(r_id) as num, where_from as source "
+					+ "from receptionview where s_name=1001 and date_format(r_date,'%Y')='1002' "
+					+ "group by season,source order by season) as a;";
+			sql = sql.replaceAll("1001", s_name);
+			sql = sql.replace("1002", year);
+			System.out.print(sql);
+			try{
+				psmt = conn.prepareStatement(sql);
+				rs = psmt.executeQuery();
+				while(rs.next()){
+					String season = rs.getString("season");
+					String source = rs.getString("source");
+					int num = rs.getInt("num");
+					statisticsClientSource = new StatisticsClientSource();
+					statisticsClientSource.setSeason(season);
+					statisticsClientSource.setClient_source(source);
+					statisticsClientSource.setStatistics_num(num);
+					result.add(statisticsClientSource);
+				}
+			}catch(SQLException e){
+					e.printStackTrace();
+			}finally{
+				JDBCUtil.closeConnection(conn, stmt, psmt, rs);
+			}
+		}else if (condition.getPeriod().equals("year")){
+			String sql = "select year,num,source from "
+					+ "(select date_format(r_date,'%Y') as year, count(r_id) as num, where_from as source "
+					+ "from receptionview where s_name=1001 and date_format(r_date,'%Y')='1002' "
+					+ "group by year,source order by year) as a;";
+			sql = sql.replaceAll("1001", s_name);
+			sql = sql.replace("1002", year);
+			System.out.print(sql);
+			try{
+				psmt = conn.prepareStatement(sql);
+				rs = psmt.executeQuery();
+				while(rs.next()){
+					String year1 = rs.getString("year");
+					String source = rs.getString("source");
+					int num = rs.getInt("num");
+					statisticsClientSource = new StatisticsClientSource();
+					statisticsClientSource.setYear(year1);
+					statisticsClientSource.setClient_source(source);
+					statisticsClientSource.setStatistics_num(num);
+					result.add(statisticsClientSource);
+				}
+			}catch(SQLException e){
+					e.printStackTrace();
+			}finally{
+				JDBCUtil.closeConnection(conn, stmt, psmt, rs);
+			}
+		}
+		return result;
+	}
 }

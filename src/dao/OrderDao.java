@@ -220,18 +220,19 @@ public class OrderDao{
 				JDBCUtil.closeConnection(conn, stmt, psmt, rs);
 			}
 		}else if (orderFindCondition.getPeriod().equals("year")){
-			String sql = "select year, num, class from (select date_format(o_date,'%Y') as year, sum(o_num) as num, car_class as class from orderview where date_format(o_date,'%Y')='1' group by date_format(o_date,'%Y'),car_class order by year) as a";
-			sql = sql.replace("1", year);
+			String sql = "select year, num, class from (select date_format(o_date,'%Y') as year, sum(o_num) as num, car_class as class from orderview where s_name=1 and date_format(o_date,'%Y')='2' group by date_format(o_date,'%Y'),car_class order by year) as a";
+			sql = sql.replace("1", s_name);
+			sql = sql.replace("2", year);
 			System.out.print(sql);
 			try{
 				psmt = conn.prepareStatement(sql);
 				rs = psmt.executeQuery();
 				while(rs.next()){
-					String month = rs.getString("year");
+					String year1 = rs.getString("year");
 					String car_class = rs.getString("class");
 					int num = rs.getInt("num");
 					order = new StatisticsOrder();
-					order.setYear(month);
+					order.setYear(year1);
 					order.setCar_class(car_class);
 					order.setStatistics_num(num);
 					result.add(order);

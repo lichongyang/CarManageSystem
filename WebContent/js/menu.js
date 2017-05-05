@@ -27,7 +27,7 @@ var menu = {
 		},{
 			title: '客户信息来源',
 			icon: 'img/img4.png',
-			href: ''
+			href: 'ClientServlet?methods=showClientPage'
 		}]
 	},
 

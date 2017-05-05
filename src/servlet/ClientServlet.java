@@ -17,6 +17,8 @@ import entity.CarFashionAnalyze;
 import entity.CarFashionAnalyzeCondition;
 import entity.Order;
 import entity.OrderFindCondition;
+import entity.StatisticsClientSource;
+import entity.StatisticsOrder;
 
 /**
  * Servlet implementation class ClientServlet
@@ -70,6 +72,18 @@ public class ClientServlet extends HttpServlet {
 			CarFashionAnalyzeCondition analyzeCondition = mapper.readValue(analyzeConditionString, CarFashionAnalyzeCondition.class);
 			ClientDao dao = new ClientDao();
 			List<CarFashionAnalyze> result = dao.findCarPrice(analyzeCondition);
+			String jsonlist = mapper.writeValueAsString(result);
+			System.out.print(jsonlist);
+			response.getWriter().println(jsonlist);
+		}else if (methods != null && methods.equals("showClientPage")){
+			//点击客户信息源后渲染页面
+			request.getRequestDispatcher("client/client_source.jsp").forward(request, response);
+		}else if (methods != null && methods.equals("ClientSourceAnalyze")){
+			String findConditionString = request.getParameter("info");
+			ObjectMapper mapper = new ObjectMapper();
+			OrderFindCondition orderFindCondition = mapper.readValue(findConditionString, OrderFindCondition.class);
+			ClientDao dao = new ClientDao();
+			List<StatisticsClientSource> result = dao.findClientSource(orderFindCondition);
 			String jsonlist = mapper.writeValueAsString(result);
 			System.out.print(jsonlist);
 			response.getWriter().println(jsonlist);
